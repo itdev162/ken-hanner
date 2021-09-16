@@ -18,13 +18,14 @@ class App extends React.Component {
         console.error('Error fetching data: ${error}');
       })
   }
-  
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           BlogBox
         </header>
+          {this.state.values.map((value: any) => <div key={value}>{value}</div>)}
       </div>
     );
   }
