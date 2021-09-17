@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using MediatR;
+using Application.Posts;
 
 namespace API
 {
@@ -21,12 +23,23 @@ namespace API
         {
             Configuration = configuration;
         }
-
+        private readonly string CorsPolicy = "CorsPolicy";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy(CorsPolicy, policyBuilder =>
+                {
+                    policyBuilder
+                        .WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<DataContext>(opt =>
             {
@@ -48,6 +61,7 @@ namespace API
             }
 
             //app.UseHttpsRedirection();
+            app.UseCors(CorsPolicy);
             app.UseMvc();
         }
     }
