@@ -7,9 +7,9 @@ namespace Persistence
     {
         public DbSet<Value> Values { get; set; }
         public DbSet<Post> Posts { get; set; }
+        
         public DataContext(DbContextOptions options) : base(options)
-        {
-            
+        {            
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
